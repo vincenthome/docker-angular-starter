@@ -11,9 +11,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     docker build -t dockerangularstarter:prod .
     ```
 
-- To specific environment by setting configuration: e.g. staging
+- To specific environment by setting configuration: e.g. staging, dev
     ```
     docker build -t dockerangularstarter:staging --build-arg configuration=staging .
+    ```
+    ```
+    docker build -t dockerangularstarter:dev --build-arg configuration=dev .
     ```
 
 ### To run
@@ -21,7 +24,10 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
   ```
   docker run --rm -p 8080:80 dockerangularstarter:prod
   ```
-
   ```
   docker run --rm -p 8080:80 dockerangularstarter:staging
   ```
+  ```
+  docker run --rm -p 8080:80 dockerangularstarter:dev
+  ```
+
