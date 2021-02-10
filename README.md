@@ -18,7 +18,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ### To run
 
-```
-docker run --rm -p 8080:80 helloworld:prod
-```
+  ```
+  docker run --rm -p 8080:80 helloworld:prod
+  ```
 
