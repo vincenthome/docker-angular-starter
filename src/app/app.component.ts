@@ -8,10 +8,10 @@ import { environment } from 'src/environments/environment';
 })
 export class AppComponent {
 
-  title = 'hello-world';
+  title = 'Dockerizing Angular App using Docker Multi-stage build - ';
 
   constructor() {
-    this.title += environment.production ? ' Production' : ' Development' ;
+    this.title += environment.name ;
   }
 
 }

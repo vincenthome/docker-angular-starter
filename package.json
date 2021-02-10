@@ -1,6 +1,6 @@
 {
-  "name": "hello-world",
-  "version": "0.0.0",
+  "name": "docker-angular-starter",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
