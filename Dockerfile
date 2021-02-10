@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 # npm ci include cache clean
 RUN npm ci --only=production -silent
-RUN npm i @angular/cli -silent
+RUN npm i @angular/cli@10.1.7 -silent
 # put ngcc in its own layer to avoid it being called on every ng build
 RUN ./node_modules/.bin/ngcc
 # RUN ./node_modules/.bin/ngcc --properties es2015 browser module main --create-ivy-entry-points
