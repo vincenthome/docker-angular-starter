@@ -8,7 +8,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 - Default to Production
     ```
-    docker build -t dockerangularstarter:prod .
+    docker build -t dockerangularstarter:production .
     ```
 
 - To specific environment by setting configuration: e.g. staging, dev
@@ -22,7 +22,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ### To run
 
   ```
-  docker run --rm -p 8080:80 dockerangularstarter:prod
+  docker run --rm -p 8080:80 dockerangularstarter:production
   ```
   ```
   docker run --rm -p 8080:80 dockerangularstarter:staging

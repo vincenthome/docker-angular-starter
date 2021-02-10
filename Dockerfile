@@ -28,11 +28,11 @@ COPY nginx-custom.conf /etc/nginx/conf.d/default.conf
 # https://github.com/Humadroid/Angular-Docker-Nginx-Multi-Stage-Builds
 
 # To build - default production
-# docker build -t dockerangularstarter:prod .
+# docker build -t dockerangularstarter:production .
 # docker build -t dockerangularstarter:staging --build-arg configuration=staging .
 # docker build -t dockerangularstarter:dev --build-arg configuration=dev .
 
 # To run
-# docker run --rm -p 8080:80 dockerangularstarter:prod
+# docker run --rm -p 8080:80 dockerangularstarter:production
 # docker run --rm -p 8080:80 dockerangularstarter:staging
 # docker run --rm -p 8080:80 dockerangularstarter:dev
