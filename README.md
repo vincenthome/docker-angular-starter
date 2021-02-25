@@ -38,3 +38,9 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - Open deployment.yml, change containers -> image to match the one in ACR
 - Run `kubectl apply -f deployment.yml`
 
+# Todo
+
+- Read config from file at runtime
+- Read Environment Variables in Angular(???), Nginx?, Node?, any other options?
+
+
