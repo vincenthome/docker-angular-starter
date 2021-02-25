@@ -31,3 +31,10 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
   docker run --rm -p 8080:80 dockerangularstarter:dev
   ```
 
+# Deploy to Azure Kubernetes Service /w public IP - AKS
+
+- Create AKS Cluster, wire to ACR (~/.my-config/snippets)
+- Docker build and push to ACR (~/.my-config/snippets)
+- Open deployment.yml, change containers -> image to match the one in ACR
+- Run `kubectl apply -f deployment.yml`
+
