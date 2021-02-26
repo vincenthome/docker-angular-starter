@@ -1,6 +1,6 @@
 # Dockerizing Angular App using Docker Multi-stage build
 
-TODO: 
+TODO: a
 - Build AppService /w APP_INITIALIZER
 [https://medium.com/bb-tutorials-and-thoughts/angular-how-to-read-environment-info-at-runtime-for-ci-cd-9a788478aa9b](https://medium.com/bb-tutorials-and-thoughts/angular-how-to-read-environment-info-at-runtime-for-ci-cd-9a788478aa9b)
 
