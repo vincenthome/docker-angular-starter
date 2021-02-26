@@ -22,6 +22,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     ```
     docker build -t dockerangularstarter:dev --build-arg configuration=dev .
     ```
+- Learn about using [--build-arg](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg)  for build time variables
 
 ### To run
 
