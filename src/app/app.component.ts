@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +10,11 @@ import { environment } from 'src/environments/environment';
 export class AppComponent {
 
   title = 'Dockerizing Angular App using Docker Multi-stage build - ';
+  appconfig: any;
 
-  constructor() {
+  constructor(private appService: AppService) {
     this.title += environment.name ;
+    this.appconfig = this.appService.settings;
   }
 
 }
