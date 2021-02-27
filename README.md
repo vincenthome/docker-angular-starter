@@ -45,7 +45,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 # Todo
 
-- Read config from file at runtime
+- ✔ Read config from file at runtime
 - Read Environment Variables in Angular(???), Nginx?, Node?, any other options?
-
-https://kubernetes.io/docs/concepts/configuration/configmap/#using-configmaps
+- https://kubernetes.io/docs/concepts/configuration/configmap/#using-configmaps
