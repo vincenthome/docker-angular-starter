@@ -34,7 +34,7 @@ spec:
           name: envread-settings
       containers:
       - name: nginx
-        image: mcr210225.azurecr.io/docker-angular-starter:0.0.2-21022520
+        image: mcr210226.azurecr.io/docker-angular-starter:0.0.2-21022622
         resources:
           requests:
             cpu: 100m
@@ -46,7 +46,7 @@ spec:
         - containerPort: 80
         volumeMounts:
           - name: envread-volume
-            mountPath: /usr/share/nginx/html/envapp/assets/
+            mountPath: /usr/share/nginx/html/assets/k8s/
 
 ---
 
