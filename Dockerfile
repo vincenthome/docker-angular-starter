@@ -21,6 +21,10 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build /usr/src/app/dist/docker-angular-starter /usr/share/nginx/html
 COPY nginx-custom.conf /etc/nginx/conf.d/default.conf
 
+RUN apk add jq
+COPY env2json.sh /
+CMD ["sh", "-c", "sh env2json.sh; echo 1; nginx -g 'daemon off;';"]
+
 # Without this still works!
 # CMD ["nginx", "-g", "daemon off;"]
 
