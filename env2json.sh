@@ -1,7 +1,7 @@
 #!/bin/bash
 
-s="HOME|HOSTNAME|PWD
-$HOME|$HOSTNAME|$PWD"
+s="HOME|HOSTNAME|ENVIRONMENT
+$HOME|$HOSTNAME|$ENVIRONMENT"
 
 (echo "$s" | jq -Rn '
             ( input  | split("|") ) as $keys |
