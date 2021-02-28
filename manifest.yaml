@@ -11,13 +11,27 @@ data:
       "basehref": "envapp",
       "backgroundColor": "red"
     }
-
 ---
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular
+  labels:
+    app: angular
+spec:
+  selector:
+    app: angular
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: angular
+  labels:
+    app: angular
 spec:
   replicas: 3
   selector:
@@ -34,7 +48,7 @@ spec:
           name: envread-settings
       containers:
       - name: nginx
-        image: mcr210228.azurecr.io/docker-angular-starter:0.0.3-21022808
+        image: mcr210228.azurecr.io/docker-angular-starter:0.0.3-2102281433
         env:
         - name: DEMO_GREETING
           value: "Hello from the environment"
@@ -53,16 +67,3 @@ spec:
           - name: envread-volume
             mountPath: /usr/share/nginx/html/assets/k8s/
 
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: angular
-spec:
-  selector:
-    app: angular
-  ports:
-  - port: 80
-    targetPort: 80
-  type: LoadBalancer
