@@ -34,7 +34,12 @@ spec:
           name: envread-settings
       containers:
       - name: nginx
-        image: mcr210226.azurecr.io/docker-angular-starter:0.0.2-21022622
+        image: mcr210228.azurecr.io/docker-angular-starter:0.0.3-21022808
+        env:
+        - name: DEMO_GREETING
+          value: "Hello from the environment"
+        - name: DEMO_FAREWELL
+          value: "Such a sweet sorrow"
         resources:
           requests:
             cpu: 100m
