@@ -43,8 +43,43 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - Open deployment.yml, change containers -> image to match the one in ACR
 - Run `kubectl apply -f deployment.yml`
 
+# Azure DevOps Pipeline
+### 2 Pipelines, 2 Clusters, 1 Image, n tags, 2 Branches, 2 pipeline yml, 2 service.yml, 2 ConfigMap k/v pairs, 2 deployment.yml, 2 Deployment/Pod env k/v pairs
+- 2 branches master, stage
+  - master
+    - master-pipeline.yml
+    - manifests folder
+      - service.yml
+        - TODO: update `ConfigMap` k/v pairs
+      - deployment.yml
+        - TODO: update Deployment/Pod `env` k/v pairs
+        - TODO: update image name? depends you want both master and stage using the same image name but differentiated only by tag (BuildID?)
+
+  - stage
+    - stage-pipeline.yml
+    - manifests folder
+      - service.yml
+        - TODO: update `ConfigMap` k/v data
+      - deployment.yml
+        - TODO: update Deployment/Pod `env` k/v data
+        - TODO: update image name? depends you want both master and stage using the same image name but differentiated only by tag (BuildID?)
+
+- 2 pipelines
+  - master
+    - 
+    - image name (for docker build and the rest): default to project name. Optionally append the branch name to differentiate master/stage images.
+    - rename azure-pipleline.yml to `master-pipeline.yml`
+    - make sure master-pipeline.yml trigger to master 
+    - save to master branch
+    - rename the pipeline to `MyRepo-master`
+  - stage
+    - image name (for docker build and the rest): default to project name. Optionally append the branch name to differentiate master/stage images.
+    - rename azure-pipleline.yml to `stage-pipeline.yml`
+    - ***** edit stage-pipeline.yml trigger to `stage` ********
+    - save to new branch `stage` off master
+    - rename the pipeline to `MyRepo-stage`
+
 # Todo
 
-- ✔ Read config from file at runtime
-- Read Environment Variables in Angular(???), Nginx?, Node?, any other options?
-- https://kubernetes.io/docs/concepts/configuration/configmap/#using-configmaps
+
+
