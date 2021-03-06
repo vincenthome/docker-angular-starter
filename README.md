@@ -48,6 +48,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - 2 branches master, stage
   - master
     - master-pipeline.yml
+      - replace original tag -> tag: '$(Build.SourceBranchName)-$(Build.BuildId)'
     - manifests folder
       - service.yml
         - TODO: update `ConfigMap` k/v pairs
@@ -57,12 +58,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
   - stage
     - stage-pipeline.yml
+      - replace original tag -> tag: '$(Build.SourceBranchName)-$(Build.BuildId)'
     - manifests folder
       - service.yml
         - TODO: update `ConfigMap` k/v data
       - deployment.yml
         - TODO: update Deployment/Pod `env` k/v data
         - TODO: update image name? depends you want both master and stage using the same image name but differentiated only by tag (BuildID?)
+
 
 - 2 pipelines
   - master
