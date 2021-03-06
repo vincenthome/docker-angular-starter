@@ -10,11 +10,13 @@ import { AppService } from './app.service';
 export class AppComponent {
 
   title = 'Dockerizing Angular App using Docker Multi-stage build - ';
-  appconfig: any;
+  appConfig: any;
+  envConfig: any;
 
   constructor(private appService: AppService) {
     this.title += environment.name ;
-    this.appconfig = this.appService.settings;
+    this.appConfig = this.appService.config;
+    this.envConfig = this.appService.env;
   }
 
 }
