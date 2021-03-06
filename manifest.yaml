@@ -19,12 +19,13 @@ metadata:
   labels:
     app: angular
 spec:
-  selector:
-    app: angular
+  type: LoadBalancer
   ports:
   - port: 80
     targetPort: 80
-  type: LoadBalancer
+  selector:
+    app: angular
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -49,21 +50,21 @@ spec:
       containers:
       - name: nginx
         image: mcr210228.azurecr.io/docker-angular-starter:0.0.3-2102281433
-        env:
-        - name: DEMO_GREETING
-          value: "Hello from the environment"
-        - name: DEMO_FAREWELL
-          value: "Such a sweet sorrow"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 250m
-            memory: 256Mi
         ports:
         - containerPort: 80
         volumeMounts:
           - name: envread-volume
             mountPath: /usr/share/nginx/html/assets/k8s/
+        env:
+        - name: DEMO_GREETING
+          value: "Hello from the environment"
+        - name: DEMO_FAREWELL
+          value: "Such a sweet sorrow"
+        # resources:
+        #   requests:
+        #     cpu: 100m
+        #     memory: 128Mi
+        #   limits:
+        #     cpu: 250m
+        #     memory: 256Mi
 
