@@ -49,7 +49,7 @@ spec:
           name: envread-settings
       containers:
       - name: nginx
-        image: mcr210228.azurecr.io/docker-angular-starter:0.0.3-2102281433
+        image: TODO: REPLACE THIS
         ports:
         - containerPort: 80
         volumeMounts:
