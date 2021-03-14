@@ -29,7 +29,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build stage
+  displayName: Build
   jobs:
   - job: Build
     displayName: Build
@@ -51,9 +51,48 @@ stages:
       displayName: 'Upload Manifests'
       artifact: manifests      
 
-- stage: Deploy
+- stage: DeployStage
   displayName: Deploy stage
   dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+# TODO: Goto Enivronment Tab and rename angular -> angular-master/develop
+    environment: 'angular-$(Build.SourceBranchName).default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo '$(mynonsecret)'
+            displayName: '*** my non secrect - experiment'
+          - script: echo '$(mysecret)'
+            displayName: '*** my secrect - experiment'
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
+# TODO: Goto Environment Tab and add Approval on Production environment
+- stage: DeployProd
+  displayName: Deploy Production
+  dependsOn: BuildStage
 
   jobs:
   - deployment: Deploy
