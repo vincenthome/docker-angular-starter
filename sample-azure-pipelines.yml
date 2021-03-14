@@ -2,8 +2,11 @@
 # Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
 trigger:
-- stage
+- master
+- develop
 
 resources:
 - repo: self
@@ -11,12 +14,14 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'd7ae9ed3-eeb9-4269-b762-10d0fbb9f6ad'
+  dockerRegistryServiceConnection: 'c8049365-1be6-4e45-8fbc-1bf5f9937d1c'
   imageRepository: 'angular'
-  containerRegistry: 'mcr210307.azurecr.io'
+  containerRegistry: 'mcrbattlestar.azurecr.io'
   dockerfilePath: '**/Dockerfile'
-  tag: '$(Build.BuildId)'
-  imagePullSecret: 'mcr2103071053f508-auth'
+  # TODO: Optional replace BuildId with BuildNumber
+  # tag: '$(Build.BuildId)'
+  tag: '$(Build.BuildNumber)'
+  imagePullSecret: 'mcrbattlestara99f-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -41,8 +46,10 @@ stages:
         tags: |
           $(tag)
 
-    - upload: manifests
-      artifact: manifests
+# TODO: rename manifests folder -> manifest-master/develop
+    - upload: manifests-$(Build.SourceBranchName)
+      displayName: 'Upload Manifests'
+      artifact: manifests      
 
 - stage: Deploy
   displayName: Deploy stage
@@ -53,11 +60,16 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'angular-1817.default'
+# TODO: Goto Enivronment Tab and rename angular -> angular-master/develop
+    environment: 'angular-$(Build.SourceBranchName).default'
     strategy:
       runOnce:
         deploy:
           steps:
+          - script: echo '$(mynonsecret)'
+            displayName: '*** my non secrect - experiment'
+          - script: echo '$(mysecret)'
+            displayName: '*** my secrect - experiment'
           - task: KubernetesManifest@0
             displayName: Create imagePullSecret
             inputs:

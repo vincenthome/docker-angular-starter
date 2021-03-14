@@ -48,8 +48,8 @@ spec:
         configMap:
           name: envread-settings
       containers:
-      - name: nginx
-        image: TODO: REPLACE THIS
+      - name: angular
+        image: mcrbattlestar.azurecr.io/angular
         ports:
         - containerPort: 80
         volumeMounts:
