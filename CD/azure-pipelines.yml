@@ -38,18 +38,29 @@ stages:
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/develop'))
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        dockerfile: CI/develop/$(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: CI/production/$(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
 
 # TODO: rename manifests folder -> manifest-master/develop
-    - upload: manifests-$(Build.SourceBranchName)
-      displayName: 'Upload Manifests'
-      artifact: manifests      
+    # - upload: manifests-$(Build.SourceBranchName)
+    #   displayName: 'Upload Manifests'
+    #   artifact: manifests
 
 - stage: DeployStage
   displayName: Deploy stage
@@ -82,8 +93,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
+                $(Pipeline.Workspace)/s/CD/deployment.yml
+                $(Pipeline.Workspace)/s/CD/stage/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
@@ -121,8 +132,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
+                $(Pipeline.Workspace)/s/CD/deployment.yml
+                $(Pipeline.Workspace)/s/CD/production/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
