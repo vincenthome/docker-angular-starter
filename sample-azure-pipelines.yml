@@ -57,7 +57,6 @@ stages:
         tags: |
           $(tag)
 
-# TODO: rename manifests folder -> manifest-master/develop
     - upload: deployments
       displayName: 'Upload Manifests'
       artifact: manifests
@@ -71,7 +70,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-# TODO: Goto Enivronment Tab and rename angular -> angular-master/develop
+# TODO: Goto Enivronment Tab create new Environment angular-stage
     environment: 'angular-stage.default'
     strategy:
       runOnce:
@@ -100,7 +99,6 @@ stages:
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
 
-# TODO: Goto Environment Tab and add Approval on Production environment
 - stage: DeployProd
   displayName: Deploy Production
   dependsOn: DeployStage
@@ -110,7 +108,8 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-# TODO: Goto Enivronment Tab and rename angular -> angular-master/develop
+# TODO: Goto Enivronment Tab create new Environment angular-production
+# TODO: Goto Environment Tab and add Approval on Production environment
     environment: 'angular-production.default'
     strategy:
       runOnce:
