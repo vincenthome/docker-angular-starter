@@ -58,9 +58,9 @@ stages:
           $(tag)
 
 # TODO: rename manifests folder -> manifest-master/develop
-    # - upload: manifests-$(Build.SourceBranchName)
-    #   displayName: 'Upload Manifests'
-    #   artifact: manifests
+    - upload: deployments
+      displayName: 'Upload Manifests'
+      artifact: manifests
 
 - stage: DeployStage
   displayName: Deploy stage
@@ -72,7 +72,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
 # TODO: Goto Enivronment Tab and rename angular -> angular-master/develop
-    environment: 'angular-$(Build.SourceBranchName).default'
+    environment: 'angular-stage.default'
     strategy:
       runOnce:
         deploy:
@@ -93,8 +93,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/s/CD/deployment.yml
-                $(Pipeline.Workspace)/s/CD/stage/service.yml
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/stage/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
@@ -103,7 +103,7 @@ stages:
 # TODO: Goto Environment Tab and add Approval on Production environment
 - stage: DeployProd
   displayName: Deploy Production
-  dependsOn: BuildStage
+  dependsOn: DeployStage
 
   jobs:
   - deployment: Deploy
@@ -111,7 +111,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
 # TODO: Goto Enivronment Tab and rename angular -> angular-master/develop
-    environment: 'angular-$(Build.SourceBranchName).default'
+    environment: 'angular-production.default'
     strategy:
       runOnce:
         deploy:
@@ -132,8 +132,8 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/s/CD/deployment.yml
-                $(Pipeline.Workspace)/s/CD/production/service.yml
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/production/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
