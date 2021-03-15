@@ -64,6 +64,7 @@ stages:
 - stage: DeployStage
   displayName: Deploy Stage
   dependsOn: Build
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
   jobs:
   - deployment: Deploy
@@ -92,7 +93,7 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/stage/deployment.yml
                 $(Pipeline.Workspace)/manifests/stage/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
@@ -102,6 +103,7 @@ stages:
 - stage: DeployProd
   displayName: Deploy Production
   dependsOn: DeployStage
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
   jobs:
   - deployment: Deploy
@@ -131,7 +133,7 @@ stages:
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/production/deployment.yml
                 $(Pipeline.Workspace)/manifests/production/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)

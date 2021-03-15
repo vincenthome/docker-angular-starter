@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular
+  labels:
+    app: angular
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: angular
+  template:
+    metadata:
+      labels:
+        app: angular
+    spec:
+      volumes:
+      - name: envread-volume
+        configMap:
+          name: envread-settings
+      containers:
+      - name: angular
+        image: mcrbattlestar.azurecr.io/angular
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: envread-volume
+            mountPath: /usr/share/nginx/html/assets/k8s/
+        env:
+        - name: DEMO_GREETING
+          value: "Hello from the environment"
+        - name: DEMO_FAREWELL
+          value: "Such a sweet sorrow"
+        # resources:
+        #   requests:
+        #     cpu: 100m
+        #     memory: 128Mi
+        #   limits:
+        #     cpu: 250m
+        #     memory: 256Mi
+
