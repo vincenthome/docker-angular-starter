@@ -14,14 +14,14 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'c8049365-1be6-4e45-8fbc-1bf5f9937d1c'
+  dockerRegistryServiceConnection: ''
   imageRepository: 'angular'
   containerRegistry: 'mcrbattlestar.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   # TODO: Optional replace BuildId with BuildNumber
   # tag: '$(Build.BuildId)'
   tag: '$(Build.BuildNumber)'
-  imagePullSecret: 'mcrbattlestara99f-auth'
+  imagePullSecret: ''
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
