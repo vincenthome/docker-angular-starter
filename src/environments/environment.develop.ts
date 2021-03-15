@@ -1,5 +1,6 @@
 export const environment = {
+    kubernetes: true,
     production: false,
-    name: 'Development'
+    name: 'Development - Build'
   };
   

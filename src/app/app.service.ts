@@ -10,7 +10,7 @@ export class AppService {
 
   constructor(private http: HttpClient) { }
 
-  configUrl = `assets/${environment.production?'k8s/':''}app.config.json`;
+  configUrl = `assets/${environment.kubernetes?'k8s/':''}app.config.json`;
   envUrl = `assets/app.env.json`;
 
   private configSettings: any = null;

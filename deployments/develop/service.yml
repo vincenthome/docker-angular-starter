@@ -9,7 +9,7 @@ data:
       "version": "1.0.0",
       "environment": "Develop",
       "basehref": "envapp",
-      "backgroundColor": "blue"
+      "backgroundColor": "pink"
     }
 ---
 apiVersion: v1
