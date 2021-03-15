@@ -42,7 +42,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: CI/develop/$(dockerfilePath)
+        dockerfile: $(dockerfilePath)-develop
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
@@ -52,7 +52,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: CI/production/$(dockerfilePath)
+        dockerfile: $(dockerfilePath)-production
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
