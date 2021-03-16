@@ -14,7 +14,7 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  binaries: 'binaries'
+  binOnly: 'productionlocal'
   dockerRegistryServiceConnection: ''
   imageRepository: 'angular'
   containerRegistry: 'mcrbattlestar.azurecr.io'
@@ -63,10 +63,10 @@ stages:
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)-$(binaries)
+        dockerfile: $(dockerfilePath)-$(binOnly)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
-          $(tag).$(binaries)
+          $(tag).$(binOnly)
 
 
     - task: Docker@2
@@ -81,8 +81,8 @@ stages:
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       inputs:
         command: cp
-        arguments: $(docker create mcrbattlestar.azurecr.io/angular:angular_angular_master_20210316.4.binaries):/usr/src/app/dist/docker-angular-starter ./archives
-        # arguments: $(docker create $(imageRepository):$(tag).$(binaries)):/usr/src/app/dist/docker-angular-starter ./$(binaries)
+        arguments: $(docker create mcrbattlestar.azurecr.io/angular:angular_angular_master_20210316.4.binOnly):/usr/src/app/dist/docker-angular-starter ./archives
+        # arguments: $(docker create $(imageRepository):$(tag).$(binOnly)):/usr/src/app/dist/docker-angular-starter ./$(binOnly)
 
     - script: |
         docker run my-registry.azurecr.io/somerepo/rnd-hello:latest 
