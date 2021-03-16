@@ -68,14 +68,26 @@ stages:
         tags: |
           $(tag).$(binaries)
 
+
+    - task: Docker@2
+      displayName: Login to ACR
+      inputs:
+        command: login
+        containerRegistry: $(dockerRegistryServiceConnection)
+
+
     - task: Docker@2
       displayName: Copy image to host
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       inputs:
         command: cp
-        arguments: $(docker create $(imageRepository):$(tag).$(binaries)):/usr/src/app/dist/docker-angular-starter ./$(binaries)
-        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: $(docker create mcrbattlestar.azurecr.io/angular:angular_angular_master_20210316.4.binaries):/usr/src/app/dist/docker-angular-starter ./archives
+        # arguments: $(docker create $(imageRepository):$(tag).$(binaries)):/usr/src/app/dist/docker-angular-starter ./$(binaries)
 
+    - script: |
+        docker run my-registry.azurecr.io/somerepo/rnd-hello:latest 
+
+        
     - script: ls -la $(Pipeline.Workspace)
       displayName: -> list Pipeline.Workspace
     - script: ls -la $(Pipeline.Workspace)/s
