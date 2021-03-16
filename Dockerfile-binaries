@@ -1,3 +1,4 @@
+### STAGE 1: Build ###
 FROM node:12.18-alpine AS build
 # ENV NODE_ENV=production
 WORKDIR /usr/src/app
@@ -13,12 +14,7 @@ COPY . .
 ARG configuration=develop
 RUN npm run build -- --configuration $configuration
 
-# az acr login --name mcrbattlestar --expose-token
-# docker login mcrbattlestar.azurecr.io --username 00000000-0000-0000-0000-000000000000 --password the_exposed_token
-# cid=$(docker create mcrbattlestar.azurecr.io/angular:angular_angular_master_20210316.4.binaries)
-# docker cp $cid:/usr/src/app/dist/docker-angular-starter ./manifest
+### STAGE 2: Run ###
+FROM node:12.18-alpine
+COPY --from=build /usr/src/app/dist/docker-angular-starter /usr/share/archives
 
-
-# cid=$(docker create dockerangularstarter:developlocal) 
-# echo $cid
-# docker cp $cid:/usr/src/app/dist/docker-angular-starter ./developlocal
