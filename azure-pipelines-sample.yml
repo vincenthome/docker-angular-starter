@@ -68,33 +68,34 @@ stages:
         tags: |
           $(tag).$(binOnly)
 
-
-    - task: Docker@2
-      displayName: Login to ACR
-      inputs:
-        command: login
-        containerRegistry: $(dockerRegistryServiceConnection)
-
-
-    - task: Docker@2
-      displayName: Copy image to host
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-      inputs:
-        command: cp
-        arguments: $(docker create mcrbattlestar.azurecr.io/angular:angular_angular_master_20210316.4.binOnly):/usr/src/app/dist/docker-angular-starter ./archives
-        # arguments: $(docker create $(imageRepository):$(tag).$(binOnly)):/usr/src/app/dist/docker-angular-starter ./$(binOnly)
-
     - script: |
-        docker run my-registry.azurecr.io/somerepo/rnd-hello:latest 
+        CID=$(docker create $(containerRegistry)/$(imageRepository):$(tag).$(binOnly))
+        docker cp $CID:/usr/share/dist ./dist
+      displayName: Extract Binaries
 
+    # - task: Docker@2
+    #   displayName: Login to ACR
+    #   inputs:
+    #     command: login
+    #     containerRegistry: $(dockerRegistryServiceConnection)
+
+    # - task: Docker@2
+    #   displayName: Copy image to host
+    #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    #   inputs:
+    #     command: cp
+    #     arguments: $(docker create $(imageRepository):$(tag).$(binOnly)):/usr/src/app/dist/docker-angular-starter ./$(binOnly)
         
     - script: ls -la $(Pipeline.Workspace)
       displayName: -> list Pipeline.Workspace
     - script: ls -la $(Pipeline.Workspace)/s
       displayName: -> list Pipeline.Workspace Source
-    - script: ls -la $(Pipeline.Workspace)/a
-      displayName: -> list Pipeline.Workspace Artifact
-        
+    - script: ls -la $(Pipeline.Workspace)/s/dist
+      displayName: -> list cp files        
+
+    - upload: dist
+      displayName: 'Upload Binaries'
+      artifact: dist
 
     - upload: deployments
       displayName: 'Upload Manifests'
@@ -157,6 +158,9 @@ stages:
       runOnce:
         deploy:
           steps:
+          - script: ls -la $(Pipeline.Workspace)/dist
+            displayName: -> list cp files        
+
           - script: echo '$(mynonsecret)'
             displayName: '*** my non secrect - experiment'
           - script: echo '$(mysecret)'

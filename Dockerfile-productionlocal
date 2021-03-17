@@ -16,5 +16,5 @@ RUN npm run build -- --configuration $configuration
 
 ### STAGE 2: Run ###
 FROM node:12.18-alpine
-COPY --from=build /usr/src/app/dist/docker-angular-starter /usr/share/archives
+COPY --from=build /usr/src/app/dist/docker-angular-starter /usr/share/dist
 
