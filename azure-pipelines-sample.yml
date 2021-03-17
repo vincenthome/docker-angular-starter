@@ -142,7 +142,7 @@ stages:
 
 
 - stage: DeployBlobStorage
-  displayName: Deploy Blob Storage
+  displayName: Deploy to Blob Storage with Windows Host Agent
   dependsOn: Build
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
@@ -150,7 +150,7 @@ stages:
   - deployment: Deploy
     displayName: Deploy
     pool:
-      vmImage: $(vmImageName)
+      vmImage: $(vmWinImageName)
     environment: 'angular-stage.default'
     strategy:
       runOnce:
@@ -169,22 +169,15 @@ stages:
 
 # Azure File Copy task https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-file-copy?view=azure-devops
 # Create ARM Service Connection for field azureSubscription https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-using-automated-security
+# Add Role Assignment to Storage Account via Storage Account -> IAM -> Role Assignments -> Add Role Assignment -> Storage Blob Data Contributor -> Search Security Principal -> Save
+# Find the latest Security Principal AAD -> App Registrations -> All applications
           - task: AzureFileCopy@4
             inputs:
-              sourcePath: '$(Pipeline.Workspace)/$(containerRegistry).$(imageRepository).$(tag).zip'
-              azureSubscription: 'masc210317'
+              azureSubscription: 'mscangular' 
               destination: azureBlob
-              storage: 'msa210317'
+              storage: 'mstbattlestar'
               containerName: 'myblob'
-              #blobPrefix: # Optional
-              #additionalArgumentsForBlobCopy: # Optional
-              #enableCopyPrerequisites: false # Optional
-              #copyFilesInParallel: true # Optional
-              #cleanTargetBeforeCopy: false # Optional
-              #skipCACheck: true # Optional
-              #sasTokenTimeOutInMinutes: # Optional
-
-
+              sourcePath: '$(Pipeline.Workspace)/$(containerRegistry).$(imageRepository).$(tag).zip'
 
 - stage: DeployStage
   displayName: Deploy Stage
