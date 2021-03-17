@@ -141,6 +141,34 @@ stages:
                 $(containerRegistry)/$(imageRepository):$(tag)
 
 
+- stage: DeployBlobStorage
+  displayName: Deploy Blob Storage
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'angular-stage.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: ls -la $(Pipeline.Workspace)/dist
+            displayName: -> list cp files        
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/dist'
+              includeRootFolder: true 
+              archiveType: 'zip'
+              archiveFile: '$(Pipeline.Workspace)/$(containerRegistry).$(imageRepository).$(tag).zip' 
+          - script: ls -la $(Pipeline.Workspace)
+            displayName: -> list Workspace files 
+
+
+
 
 - stage: DeployStage
   displayName: Deploy Stage
