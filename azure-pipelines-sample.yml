@@ -73,6 +73,13 @@ stages:
         docker cp $CID:/usr/share/dist ./dist
       displayName: Extract Binaries
 
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: './dist'
+        includeRootFolder: true 
+        archiveType: 'zip'
+        archiveFile: './$(containerRegistry).$(imageRepository).$(tag).zip'
+
     # - task: Docker@2
     #   displayName: Login to ACR
     #   inputs:
@@ -93,9 +100,9 @@ stages:
     - script: ls -la $(Pipeline.Workspace)/s/dist
       displayName: -> list cp files        
 
-    - upload: dist
+    - upload: './$(containerRegistry).$(imageRepository).$(tag).zip'
       displayName: 'Upload Binaries'
-      artifact: dist
+      artifact: bin
 
     - upload: deployments
       displayName: 'Upload Manifests'
@@ -158,12 +165,6 @@ stages:
           steps:
           - script: ls -la $(Pipeline.Workspace)/dist
             displayName: -> list cp files        
-          - task: ArchiveFiles@2
-            inputs:
-              rootFolderOrFile: '$(Pipeline.Workspace)/dist'
-              includeRootFolder: true 
-              archiveType: 'zip'
-              archiveFile: '$(Pipeline.Workspace)/$(containerRegistry).$(imageRepository).$(tag).zip' 
           - script: ls -la $(Pipeline.Workspace)
             displayName: -> list Workspace files 
 
@@ -177,7 +178,7 @@ stages:
               destination: azureBlob
               storage: 'mstbattlestar'
               containerName: 'myblob'
-              sourcePath: '$(Pipeline.Workspace)/$(containerRegistry).$(imageRepository).$(tag).zip'
+              sourcePath: '$(Pipeline.Workspace)/bin/$(containerRegistry).$(imageRepository).$(tag).zip'
 
 - stage: DeployStage
   displayName: Deploy Stage
