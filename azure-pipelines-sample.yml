@@ -14,7 +14,6 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  binOnly: 'productionlocal'
   dockerRegistryServiceConnection: ''
   imageRepository: 'angular'
   containerRegistry: 'mcrbattlestar.azurecr.io'
@@ -26,7 +25,8 @@ variables:
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
-
+  vmWinImageName: 'windows-latest'
+  binOnly: 'productionlocal'
 
 stages:
 - stage: Build
@@ -38,7 +38,7 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build Develop and push an image to container registry
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/develop'))
       inputs:
         command: buildAndPush
@@ -48,7 +48,7 @@ stages:
         tags: |
           $(tag)
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build Production and push an image to container registry
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       inputs:
         command: buildAndPush
@@ -58,7 +58,7 @@ stages:
         tags: |
           $(tag)
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build BinOnly and push an image to container registry
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       inputs:
         command: buildAndPush
@@ -167,6 +167,22 @@ stages:
           - script: ls -la $(Pipeline.Workspace)
             displayName: -> list Workspace files 
 
+# Azure File Copy task https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-file-copy?view=azure-devops
+# Create ARM Service Connection for field azureSubscription https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-using-automated-security
+          - task: AzureFileCopy@4
+            inputs:
+              sourcePath: '$(Pipeline.Workspace)/$(containerRegistry).$(imageRepository).$(tag).zip'
+              azureSubscription: 'masc210317'
+              destination: azureBlob
+              storage: 'msa210317'
+              containerName: 'myblob'
+              #blobPrefix: # Optional
+              #additionalArgumentsForBlobCopy: # Optional
+              #enableCopyPrerequisites: false # Optional
+              #copyFilesInParallel: true # Optional
+              #cleanTargetBeforeCopy: false # Optional
+              #skipCACheck: true # Optional
+              #sasTokenTimeOutInMinutes: # Optional
 
 
 
