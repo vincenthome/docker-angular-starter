@@ -220,12 +220,47 @@ stages:
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
 
+
+# Alternative: based on Environments dedicated to Approvals or Not
+# - stage: 'Approval not required'
+#   jobs:
+#   - deployment: 'MyDeployment'
+#     displayName: MyDeployment
+#     environment: 'ApprovalNotRequired'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           # whatever
+
+# - stage: 'Approval required'
+#   jobs:
+#   - deployment: 'MyDeployment2'
+#     displayName: MyDeployment2
+#     environment: 'ApprovalRequired'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           # whatever
+
+
 - stage: DeployProd
   displayName: Deploy Production
   dependsOn: DeployStage
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
   jobs:
+  - job: waitForApproval
+    displayName: Wait for Approval  
+    pool: server    
+    timeoutInMinutes: 4320 # job times out in 3 days
+    steps:   
+    - task: ManualValidation@0
+      timeoutInMinutes: 1440  # task times out in 1 day
+      inputs:
+        notifyUsers: |
+          vincenthome@hotmail.com
+        instructions: 'Please review and approve production release'
+
   - deployment: Deploy
     displayName: Deploy
     pool:
