@@ -84,8 +84,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
         - TODO: update image name? depends you want both master and stage using the same image name but differentiated only by tag (BuildID?)
 
 
+- tips
 
-# Todo
+include `[skip ci]` in the comment to skip the ci trigger
+
+# Todo   
 
 
 
